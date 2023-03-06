@@ -126,11 +126,10 @@ function handleInteractions() {
 		let vy = (clickY - mouseY) * energy
 		let speed = sqrt(vx**2 + vy**2)
 		if (!(vx == 0 && vy == 0)) {
-			fetus.setVelocity(vx, vy)
-			fetus.setScale(min(1, speed * 0.5))
 			fetus.x = (mouseX + clickX) / 2
 			fetus.y = (mouseY + clickY) / 2
-			fetus.setVertices()
+			fetus.setVelocity(vx, vy)
+			fetus.setScale(min(1, speed))
 		}
 	}
 }
@@ -198,10 +197,10 @@ class Vehicle {
 		let speed = sqrt(this.vx**2 + this.vy**2)
 		this.x1 = this.x + (vehicleSize * this.scale + speed) * cos(this.angle)
 		this.y1 = this.y + (vehicleSize * this.scale + speed) * sin(this.angle)
-		this.x2 = this.x + (vehicleSize * this.scale - speed/2) * cos(this.angle + 2 * PI/3)
-		this.y2 = this.y + (vehicleSize * this.scale - speed/2) * sin(this.angle + 2 * PI/3)
-		this.x3 = this.x + (vehicleSize * this.scale - speed/2) * cos(this.angle + 4 * PI/3)
-		this.y3 = this.y + (vehicleSize * this.scale - speed/2) * sin(this.angle + 4 * PI/3)
+		this.x2 = this.x + max(vehicleSize * this.scale - speed/2, 1) * cos(this.angle + 2 * PI/3)
+		this.y2 = this.y + max(vehicleSize * this.scale - speed/2, 1) * sin(this.angle + 2 * PI/3)
+		this.x3 = this.x + max(vehicleSize * this.scale - speed/2, 1) * cos(this.angle + 4 * PI/3)
+		this.y3 = this.y + max(vehicleSize * this.scale - speed/2, 1) * sin(this.angle + 4 * PI/3)
 	}
 }
 
