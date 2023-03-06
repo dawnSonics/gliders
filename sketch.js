@@ -130,6 +130,7 @@ function handleInteractions() {
 			fetus.setScale(min(1, speed * 0.5))
 			fetus.x = (mouseX + clickX) / 2
 			fetus.y = (mouseY + clickY) / 2
+			fetus.setVertices()
 		}
 	}
 }
