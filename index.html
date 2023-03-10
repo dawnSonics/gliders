@@ -1,24 +1,122 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Gliders</title>
-		<script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
-		<!-- <script src="../libraries/p5.js"></script> -->
-		<!-- <script src="../libraries/p5.sound.js"></script> -->
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Gliders</title>
+
+	<link rel="stylesheet" href="style.css">
+
+	<script type="text/javascript">
+		(function (f, b) {
+			if (!b.__SV) {
+				var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) {
+					function g(a, d) { var b = d.split("."); 2 == b.length && (a = a[b[0]], d = b[1]); a[d] = function () { a.push([d].concat(Array.prototype.slice.call(arguments, 0))) } } var a = b; "undefined" !== typeof c ? a = b[c] = [] : c = "mixpanel"; a.people = a.people || []; a.toString = function (a) { var d = "mixpanel"; "mixpanel" !== c && (d += "." + c); a || (d += " (stub)"); return d }; a.people.toString = function () { return a.toString(1) + ".people (stub)" }; i = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
+					for (h = 0; h < i.length; h++)g(a, i[h]); var j = "set set_once union unset remove delete".split(" "); a.get_group = function () { function b(c) { d[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); a.push([e, call2]) } } for (var d = {}, e = ["get_group"].concat(Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++)b(j[c]); return d }; b._i.push([e, f, c])
+				}; b.__SV = 1.2; e = f.createElement("script"); e.type = "text/javascript"; e.async = !0; e.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ?
+					MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g)
+			}
+		})(document, window.mixpanel || []);
+
+		mixpanel.init('cc871860db49f6d78ef6fa906b7e2823', { debug: false });
+		mixpanel.track('page-view');
+	</script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-WDYCP4Y478"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-WDYCP4Y478');
+	</script>
+</head>
+
+<body>
+	<div class="desktop-display" id="canvas-div">
+		<h1 id="title">Gliders</h1>
+
+		<a href="https://help.ableton.com/hc/en-us/articles/209774225-Setting-up-a-virtual-MIDI-bus" target="_blank">
+			<div id="tooltip">
+				<h2>Connect to your DAW:</h2>
+			</div>
+		</a>
+
+		<div>
+			<select name="midiout-select" id="midiout-select">
+				<option value="">Select MIDI Output Port</option>
+			</select>
+		</div>
+		<script defer src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
 		<script defer src="https://unpkg.com/p5.collide2d"></script>
-    	<script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
-		<script src="sketch.js"></script>
-		<style>
-			body {
-				margin: 0;
-				padding: 0;
-			}
-			canvas {
-				margin: auto;
-			}
-		</style>
-	</head>
-	<body></body>
+		<script defer src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
+		<script defer src="sketch.js"></script>
+	</div>
+
+	<div class="mobile-display">
+        <link href="//cdn-images.mailchimp.com/embedcode/classic-071822.css" rel="stylesheet" type="text/css">
+
+        <div id="content">
+            <div id="title-mobile">
+                <img src="assets/gliders-title.svg" alt="">
+            </div>
+
+            <div class="text-block">
+                <p>Gliders is an experimental sequencer that flies. By shooting gliders at an ever morphing tonal landscape, you are able to draw out patterns that are at once unpredictable and melodic.</p>
+            </div>
+
+            <div class="video">
+                <video controls autoplay loop muted>
+                    <source src="assets/gliders-demo.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                  </video>
+            </div>
+
+            <!-- <div class="text-block" style="padding-bottom: 48px; margin-bottom: 64px; border-bottom: 1px solid white">
+                <p>Barcode lets you generate staccato rhythms with mouse strokes.</p>
+            </div> -->
+
+            <div class="text-block">
+                <p>Gliders works by sending MIDI directly into your DAW via a <a href="https://help.ableton.com/hc/en-us/articles/209774225-Setting-up-a-virtual-MIDI-bus">virtual MIDI bus</a>. You can pipe the MIDI into any synth or sampler.</p>
+            </div>
+
+            <div class="text-block" class="text-block" style="padding-bottom: 48px; margin-bottom: 64px; border-bottom: 1px solid white">
+                <p>Open this page on your desktop browser to use Gliders with your DAW.</p>
+            </div>
+
+            <div class="text-block">
+                <p>For updates about new features and upcoming projects, subscribe to our newsletter:</p>
+            </div>
+
+            <div id="mc_embed_signup">
+                <form action="https://gmail.us10.list-manage.com/subscribe/post?u=0506be1bee58b4937592a86cc&amp;id=a2d85e01fa&amp;f_id=008ccfe5f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                    <div id="mc_embed_signup_scroll">
+                    <!-- <h2>Subscribe</h2> -->
+                    <!-- <div class="indicates-required"><span class="asterisk">*</span> indicates required</div> -->
+            <div class="mc-field-group" style="width: 100%; padding-top: 8px">
+                <!-- <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span> -->
+            </label>
+                <input type="email" placeholder="Enter your email here" name="EMAIL" class="required email" id="mce-EMAIL" required>
+                <!-- <span id="mce-EMAIL-HELPERTEXT" class="helper_text"></span> -->
+            </div>
+                <!-- <div id="mce-responses" class="clear foot"> -->
+                    <div class="response" id="mce-error-response" style="display:none"></div>
+                    <div class="response" id="mce-success-response" style="display:none"></div>
+                <!-- </div>    real people should not fill this in and expect good things - do not remove this or risk form bot signups -->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_0506be1bee58b4937592a86cc_a2d85e01fa" tabindex="-1" value=""></div>
+                    <div class="optionalParent">
+                        <!-- <div class="clear foot"> -->
+                            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe">
+                            <!-- <p class="brandingLogo"><a href="http://eepurl.com/ik6K9H" title="Mailchimp - email marketing made easy and fun"><img src="https://eep.io/mc-cdn-images/template_images/branding_logo_text_dark_dtp.svg"></a></p> -->
+                        <!-- </div> -->
+                    </div>
+                </div>
+            </form>
+            </div>
+            <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[3]='ADDRESS';ftypes[3]='address';fnames[4]='PHONE';ftypes[4]='phone';fnames[5]='BIRTHDAY';ftypes[5]='birthday';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
+            <!--End mc_embed_signup-->
+            
+        </div>
+	</div>
+</body>
+
 </html>

@@ -1,8 +1,6 @@
 var energy = 0.05
 var vehicleSize = 20
 var vehicleLifetime = 400
-// var midiOutPortName = "loopMIDI Port 1"
-var midiOutPortName = "IAC Driver Bus 1"
 
 let padding = 300
 let tilePadding = 10
@@ -17,6 +15,7 @@ var vehicles = []
 var tiles = []
 var fetus = false
 var clickX = 0 , clickY = 0
+var prevWindowWidth, prevWindowHeight
 
 let midiOut = null
 let dudler;
@@ -26,12 +25,16 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(windowWidth, windowHeight);
+	canvas = createCanvas(windowWidth, windowHeight);
+    canvas.parent('canvas-div');
+
+	prevWindowWidth = windowWidth
+	prevWindowHeight = windowHeight
 
 	WebMidi
 		.enable()
 		.then(onMidiEnabled)
-		.catch(err => alert(err));
+		// .catch(err => alert(err));
 
 	for (let i = 0; i < tileCount; i++) {
 		let noteIdx = i % notes.length
@@ -113,23 +116,22 @@ function mousePressed() {
 
 function mouseClicked() {
 	state = 0
-	if (!(fetus.vx == 0 && fetus.vx == 0))
-	vehicles.push(fetus)
+	if (!(fetus.vx == 0 && fetus.vy == 0)) {
+		vehicles.push(fetus)
+	}
 	fetus = false
 }
 
 function handleInteractions() {
 	if (state == 1) {
-		// let vx = (fetus.x - mouseX) * energy
-		// let vy = (fetus.y - mouseY) * energy
 		let vx = (clickX - mouseX) * energy
 		let vy = (clickY - mouseY) * energy
-		let speed = sqrt(vx**2 + vy**2)
+		let speed = norm2d(vx, vy)
 		if (!(vx == 0 && vy == 0)) {
 			fetus.x = (mouseX + clickX) / 2
 			fetus.y = (mouseY + clickY) / 2
 			fetus.setVelocity(vx, vy)
-			fetus.setScale(min(1, speed))
+			fetus.setScale(min(1, 0.5 * speed))
 		}
 	}
 }
@@ -143,6 +145,8 @@ class Vehicle {
 		this.lifetime = vehicleLifetime
 		this.scale = 0.1
 
+		// this.prevPerturbation = 0
+
 		this.setVelocity(0, 0)
 		this.setAngle(xyToAngle(windowWidth/2 - x, windowHeight/2 - y))
 	}
@@ -154,10 +158,6 @@ class Vehicle {
 		fill(0, this.lifetime)
 
 		triangle(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3)
-
-		// stroke(255, 255);
-		// strokeWeight(2)
-		// line(this.x, this.y, windowWidth/2, windowHeight/2)
 	}
 
 	tick() {
@@ -166,9 +166,15 @@ class Vehicle {
 		this.lifetime -= 2
 		this.setVertices()
 
-		// let vx = this.vx + random(-1, 1)
-		// let vy = this.vy + random(-1, 1)
+		// let speed = this.getSpeed()
+		// let perturbation = 0.95 * this.prevPerturbation + 0.05 * random(-0.2, 0.2)
+		// let vx = this.vx - perturbation * this.vy / speed
+		// let vy = this.vy + perturbation * this.vx / speed
+		// let newSpeed = norm2d(vx, vy)
+		// vx = speed * vx / newSpeed 
+		// vy = speed * vy / newSpeed 
 		// this.setVelocity(vx, vy)
+		// this.prevPerturbation = perturbation
 	}
 
 	finished() {
@@ -194,7 +200,7 @@ class Vehicle {
 	}
 
 	setVertices() {
-		let speed = sqrt(this.vx**2 + this.vy**2)
+		let speed = norm2d(this.vx, this.vy)
 		this.x1 = this.x + (vehicleSize * this.scale + speed) * cos(this.angle)
 		this.y1 = this.y + (vehicleSize * this.scale + speed) * sin(this.angle)
 		this.x2 = this.x + max(vehicleSize * this.scale - speed/2, 1) * cos(this.angle + 2 * PI/3)
@@ -276,11 +282,15 @@ function xyToAngle(x, y) {
 		}
 		return angle
 	}
-	return 0
+	return -PI/2
 }
 
 function modulo(a, b) {
   return ((a % b) + b) % b;
+}
+
+function norm2d(x, y) {
+	return sqrt(x**2 + y**2)
 }
 
 noteNames = [ 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -301,5 +311,36 @@ function onMidiEnabled() {
 	console.log("Outputs:")
 	WebMidi.outputs.forEach(output => console.log(output.manufacturer, output.name));
 
-	midiOut = WebMidi.getOutputByName(midiOutPortName);
+    let midiOutSelect = document.getElementById('midiout-select');
+    for (let output of WebMidi.outputs) {
+        let opt = document.createElement('option');
+        opt.value = output.name;
+        opt.innerHTML = output.name;
+        midiOutSelect.appendChild(opt);
+    }
+}
+
+document.getElementById('midiout-select').onchange = function () {
+    if (this.value != '') {
+        mixpanel.track('midiout-select');
+		midiOut = WebMidi.getOutputByName(this.value);
+    }
+};
+
+document.getElementById('tooltip').onclick= function () {
+    mixpanel.track('tooltip-click');
+};
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight)
+
+	for (tile of tiles) {
+    	tile.pos.x = tile.pos.x * windowWidth / prevWindowWidth
+    	tile.width = tile.width * windowWidth / prevWindowWidth
+
+		tile.pos.y = windowHeight / 2
+	}
+
+    prevWindowWidth = windowWidth
+    prevWindowHeight = windowHeight
 }
