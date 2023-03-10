@@ -227,7 +227,7 @@ a:hover {
     }
 
     #mc_embed_signup form {
-        margin: 0px;
+        margin: 0px !important;
     }
 
     #mce-EMAIL {
